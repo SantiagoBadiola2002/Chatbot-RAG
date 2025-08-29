@@ -102,13 +102,14 @@ def hybrid_chatbot(user_input: str):
 # ==============================
 # 🚀 Bucle de conversación
 # ==============================
-if __name__ == "__main__":
-    print("🤖 Chatbot iniciado. Escribe 'exit' o 'salir' para terminar.")
-    while True:
-        user_input = input("\nPregunta: ")
-        if user_input.lower() in ["exit", "salir"]:
-            print("Hasta luego! 👋")
-            break
-        
-        respuesta = hybrid_chatbot(user_input)
-        print(f"\nRespuesta IA: {respuesta}\n")
+# if __name__ == "__main__":
+#     print("🤖 Chatbot iniciado. Escribe 'exit' o 'salir' para terminar.")
+#     while True:
+#         user_input = input("\nPregunta: ")
+#         if user_input.lower() in ["exit", "salir"]:
+#             print("Hasta luego! 👋")
+#             break
+#         
+#         respuesta = hybrid_chatbot(user_input)
+#         print(f"\nRespuesta IA: {respuesta}\n")
+

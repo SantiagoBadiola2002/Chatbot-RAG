@@ -12,6 +12,7 @@ Un chatbot basado en **RAG (Retrieval-Augmented Generation)** usando `llama-inde
 - [Qdrant](https://qdrant.tech/)
 - `qdrant-client` para interactuar con la base de datos de vectores
 - SQLAlchemy y PyMySQL para interacción con MySQL
+- Flask para la interfaz gráfica
 
 ---
 
@@ -52,6 +53,8 @@ pip install pymysql
 pip install qdrant-client
 
 pip install sqlalchemy
+
+pip install flask
 
 
 
@@ -138,22 +141,17 @@ CREATE TABLE historial_seguimiento (
 `engine = create_engine("mysql+pymysql://root:@localhost/tracking_db")`
 
 
-## 6.📝 Uso
+## 6. 🖥️ Uso con interfaz gráfica
 
 1. Ejecutar el chatbot:
 
     `python main.py`
 
-2. Hacer preguntas al chatbot:
+2. Abre tu navegador y entra a:
 
-    `Pregunta: ¿Cuál es la función principal del proyecto?`
+    `http://127.0.0.1:5000`
 
-    `Respuesta IA: ...`
-
-3. Para salir, escribir:
-
-    `exit o salir`
-
+3. Para salir, usa ctrl+C en consola.
 
 💡 Notas
 
