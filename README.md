@@ -127,7 +127,7 @@ CREATE TABLE historial_seguimiento (
 
 1. Ejecutar el chatbot:
 
-    `python main.py`
+    `python gui.py`
 
 2. Abre tu navegador y entra a:
 
