@@ -36,27 +36,9 @@ Linux:
 
 ## 2. Instalar dependencias
 
-pip install llama-index
-
-pip install llama-index-llms-google-genai
-
-pip install llama-index-embeddings-google-genai
-
-pip install PyPDF2
-
-pip install tiktoken
-
-pip install mysql-connector-python
-
-pip install pymysql
-
-pip install qdrant-client
-
-pip install sqlalchemy
-
-pip install flask
-
-
+```bash
+pip install -r requirements.txt
+```
 
 ## 3. Configurar credenciales
 
