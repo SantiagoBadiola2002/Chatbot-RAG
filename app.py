@@ -8,12 +8,13 @@ from llama_index.core.query_engine import NLSQLTableQueryEngine
 import os
 import logging
 from sqlalchemy import create_engine, inspect
+from router import detectar_intencion 
 
 # ==============================
 # 🔑 Configuración
 # ==============================
 logging.basicConfig(level=logging.WARNING)
-os.environ["GOOGLE_API_KEY"] = "TU_GOOGLE_API_KEY"
+os.environ["GOOGLE_API_KEY"] = "TU_API_KEY_AQUI"  # Reemplaza con tu clave real
 
 # ==============================
 # ⚙️ Conexión a MySQL
@@ -35,8 +36,8 @@ llm = GoogleGenAI(model="gemini-2.0-flash")
 # ⚙️ Configuración Qdrant
 # ==============================
 qdrant_client = QdrantClient(
-    url="TU_QDRANT_URL",
-    api_key="TU_QDRANT_API_KEY"
+    url="TU_QDRANT_URL_AQUI",  # Reemplaza con tu URL real
+    api_key="TU_QDRANT_API_KEY_AQUI"  # Reemplaza con tu API Key real
 )
 
 embed_model = GoogleGenAIEmbedding(
@@ -77,27 +78,32 @@ sql_query_engine = NLSQLTableQueryEngine(
 # 🤖 Chat híbrido
 # ==============================
 def hybrid_chatbot(user_input: str):
-    """
-    Decide si la pregunta es sobre SQL o documentos y responde.
-    - Si menciona tablas, columnas o palabras relacionadas con datos: SQL
-    - Sino: documentos (Qdrant)
-    """
-    user_input_lower = user_input.lower()
-    
-    # Lista de palabras que sugieren consulta SQL
-    sql_keywords = ["paquete", "tracking", "envío", "orden", "camion", "usuario", "historial", "mostrar", "listar", "ver"]
-    
-    # Detectar si alguna palabra clave aparece o si menciona tablas existentes
-    if any(word in user_input_lower for word in sql_keywords) or any(tabla.lower() in user_input_lower for tabla in tablas_db):
-        try:
+    try:
+        tipo = detectar_intencion(user_input, llm)
+
+        if tipo == "SQL":
             respuesta_sql = sql_query_engine.query(user_input)
-            # Formatear la respuesta en texto amigable
-            return f"📊 Datos obtenidos:\n{respuesta_sql}"
-        except Exception as e:
-            return f"⚠️ Error al consultar la base de datos: {str(e)}"
-    else:
-        # Pregunta sobre documentos
-        return chatbot_docs.chat(user_input)
+            if not respuesta_sql:
+                respuesta = "❗ No encontré resultados para esa consulta."
+            else:
+                respuesta = f"📊 Datos obtenidos:\n{respuesta_sql}"
+
+        elif tipo == "DOCS":
+            # Aquí iría tu motor de documentos Qdrant
+             respuesta = chatbot_docs.chat(user_input).response
+
+        else:
+            logging.warning(f"Intención no clara: {user_input}")
+            respuesta = "❓ No estoy seguro de cómo responder a eso. Lo estoy registrando para mejorar."
+
+        # Logear QA
+        #log_qa(user_input, respuesta)
+        return respuesta
+
+    except Exception as e:
+        logging.error(f"Error al procesar la pregunta: {user_input} | {e}")
+        return "⚠️ Hubo un error procesando tu pregunta. Se registró para revisión."
+
 
 # ==============================
 # 🚀 Bucle de conversación

@@ -42,7 +42,7 @@ pip install -r requirements.txt
 
 ## 3. Configurar credenciales
 
- ### Agrega tu clave de API de Google:
+ ### Agrega tu clave de API de Google en app.py y router.py:
 
 ```bash
 export GOOGLE_API_KEY="TU_API_KEY"   # Linux/macOS
