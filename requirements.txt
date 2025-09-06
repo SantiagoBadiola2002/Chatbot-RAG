@@ -1,10 +1,20 @@
+# Core LlamaIndex
 llama-index
 llama-index-llms-google-genai
 llama-index-embeddings-google-genai
+llama-index-vector-stores-faiss
+
+# Procesamiento de documentos
 PyPDF2
 tiktoken
+
+# Base de datos MySQL
 mysql-connector-python
 pymysql
-qdrant-client
 sqlalchemy
+
+# Web API
 flask
+
+# Vector store (FAISS local)
+faiss-cpu   # 👉 usa faiss-gpu si tenés CUDA

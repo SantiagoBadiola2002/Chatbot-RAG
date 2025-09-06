@@ -4,7 +4,7 @@ from llama_index.core.prompts import RichPromptTemplate
 import os
 import logging
 
-os.environ["GOOGLE_API_KEY"] = "TU_API_KEY_AQUI"  # Reemplaza con tu clave real
+os.environ["GOOGLE_API_KEY"] = "TU_GOOGLE_API_KEY"  # Reemplaza con tu clave real
 llm = GoogleGenAI(model="gemini-2.0-flash")
 
 # Configuración logging
