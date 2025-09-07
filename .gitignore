@@ -29,3 +29,8 @@ docs/
 # Otros archivos
 # ======================
 *.env
+
+# ======================
+# Carpeta de almacenamiento
+# ======================
+storage/

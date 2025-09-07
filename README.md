@@ -41,7 +41,7 @@ pip install -r requirements.txt
 
 ## 3. Configurar credenciales
 
- ### Agrega tu clave de API de Google en app.py y router.py:
+ ### Agrega tu clave de API de Google en llm_embedding.py:
 
 ```bash
 export GOOGLE_API_KEY="TU_API_KEY"   # Linux/macOS
@@ -114,7 +114,11 @@ CREATE TABLE historial_seguimiento (
 `engine = create_engine("mysql+pymysql://root:@localhost/tracking_db")`
 
 
-## 6. 🖥️ Uso con interfaz gráfica
+## 7. Crear los embedding de los documentos y de los datasets
+
+`python init_storage.py`
+
+## 8. 🖥️ Uso con interfaz gráfica
 
 1. Ejecutar el chatbot:
 
