@@ -47,6 +47,26 @@
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
 
+    function generateSessionId() {
+      // Generar UUIDv4 simple
+      return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c => (
+        c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4
+      ).toString(16));
+    }
+
+    // Inicializar session_id y almacenarlo en localStorage para persistencia por cliente
+    let sessionId = localStorage.getItem('session_id');
+    if (!sessionId) {
+      try {
+        sessionId = generateSessionId();
+        localStorage.setItem('session_id', sessionId);
+      } catch (e) {
+        // En entornos sin crypto (muy raro en browsers modernos) fallback
+        sessionId = String(Date.now()) + Math.random().toString(36).slice(2,10);
+        localStorage.setItem('session_id', sessionId);
+      }
+    }
+
     async function sendMessage() {
       const text = input.value.trim();
       if (!text) return;
@@ -58,9 +78,15 @@
       const res = await fetch("/chat", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({message: text})
+        body: JSON.stringify({message: text, session_id: sessionId})
       });
       const data = await res.json();
+
+      // Si el servidor generó un session_id, guárdalo para próximas peticiones
+      if (data.session_id) {
+        sessionId = data.session_id;
+        localStorage.setItem('session_id', sessionId);
+      }
 
       addMessage(data.reply, "bot");
     }

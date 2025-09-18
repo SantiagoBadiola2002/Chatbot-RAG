@@ -1,5 +1,7 @@
 import os
 import logging
+import threading
+from typing import Optional
 from sqlalchemy import create_engine, inspect
 from llama_index.core import StorageContext, load_index_from_storage, SQLDatabase
 from llama_index.vector_stores.faiss import FaissVectorStore
@@ -7,6 +9,7 @@ from llama_index.llms.google_genai import GoogleGenAI
 from llama_index.core.query_engine import NLSQLTableQueryEngine
 from llm_embedding import embed_model, llm
 from router import detectar_intencion  # Función de intención ya preparada
+from session_manager import SessionManager
 import numpy as np
 import faiss
 import pickle
@@ -40,10 +43,11 @@ storage_context = StorageContext.from_defaults(
     persist_dir=persist_dir
 )
 index = load_index_from_storage(storage_context, embed_model=embed_model)
-chatbot_docs = index.as_chat_engine(llm=llm)
+# Session manager centralizado
+session_manager = SessionManager(index, llm=llm)
 
 # ==============================
-# 🔹 Configuración SQL
+# �🔹 Configuración SQL
 # ==============================
 sql_query_engine = NLSQLTableQueryEngine(
     sql_database=sql_database,
@@ -68,7 +72,7 @@ with open(metadata_path, "rb") as f:
 # ==============================
 # 🤖 Chat híbrido
 # ==============================
-def hybrid_chatbot(user_input: str):
+def hybrid_chatbot(user_input: str, session_id: Optional[str] = None):
     try:
         tipo = detectar_intencion(user_input)  # Usa el índice persistente
 
@@ -76,7 +80,10 @@ def hybrid_chatbot(user_input: str):
             respuesta_sql = sql_query_engine.query(user_input)
             respuesta = f"📊 Datos obtenidos:\n{respuesta_sql}" if respuesta_sql else "❗ No encontré resultados."
         elif tipo == "DOCS":
-            respuesta = chatbot_docs.chat(user_input).response
+            # Obtener/crear chat engine para esta sesión
+            engine = session_manager.get_engine(session_id)
+            # Usar el engine de la sesión para mantener el contexto separado
+            respuesta = engine.chat(user_input).response
         else:
             respuesta = "❓ No estoy seguro de cómo responder a eso."
 

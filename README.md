@@ -130,6 +130,17 @@ CREATE TABLE historial_seguimiento (
 
 3. Para salir, usa ctrl+C en consola.
 
+## Sesiones y aislamiento de contexto
+
+El chatbot ahora soporta sesiones separadas por `session_id`. Cada cliente que abra la interfaz web recibirá un `session_id` generado y almacenado en `localStorage`. Ese `session_id` se envía con cada petición al backend y el servidor mantiene un chat engine separado por sesión en memoria.
+
+Notas importantes:
+- Esto evita que las conversaciones de distintos usuarios se mezclen.
+- Implementación actual: store en memoria (diccionario protegido por lock). Funciona bien en un solo proceso/worker.
+- Para despliegues con múltiples procesos o instancias (gunicorn con varios workers, múltiples containers), usa un store compartido (por ejemplo Redis) o un diseño que centralice el estado. De lo contrario las sesiones no se compartirán entre procesos.
+
+Si deseas que implemente soporte con Redis (recomendado para producción), puedo añadir un ejemplo y dependencias.
+
 💡 Notas
 
 El entorno virtual no se sube a GitHub. Usa requirements.txt para instalar dependencias:

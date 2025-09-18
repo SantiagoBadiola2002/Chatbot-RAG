@@ -4,7 +4,7 @@ from llama_index.llms.google_genai import GoogleGenAI
 import os
 
 # 🔑 API Key
-os.environ["GOOGLE_API_KEY"] = "TU_GOOGLE_API_KEY"  # reemplaza con la tuya
+os.environ["GOOGLE_API_KEY"] = "AIzaSyBtKBdBmImELe1ce_m1BBNguyikHJXY6Bk"  # reemplaza con la tuya
 
 # Instancia global de embeddings
 embed_model = GoogleGenAIEmbedding(model_name="text-embedding-004")
