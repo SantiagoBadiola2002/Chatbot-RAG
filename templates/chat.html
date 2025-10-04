@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Chatbot Híbrido</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
   <div class="chat-container">
     <!-- Header -->
@@ -41,7 +43,7 @@
       msg.classList.add("message", sender);
       msg.innerHTML = `
         <div class="bubble">${content}</div>
-        <span class="time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}</span>
+        <span class="time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
       `;
       messagesDiv.appendChild(msg);
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
@@ -49,7 +51,7 @@
 
     function generateSessionId() {
       // Generar UUIDv4 simple
-      return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c => (
+      return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c => (
         c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4
       ).toString(16));
     }
@@ -62,7 +64,7 @@
         localStorage.setItem('session_id', sessionId);
       } catch (e) {
         // En entornos sin crypto (muy raro en browsers modernos) fallback
-        sessionId = String(Date.now()) + Math.random().toString(36).slice(2,10);
+        sessionId = String(Date.now()) + Math.random().toString(36).slice(2, 10);
         localStorage.setItem('session_id', sessionId);
       }
     }
@@ -77,8 +79,8 @@
       // Enviar al backend
       const res = await fetch("/chat", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({message: text, session_id: sessionId})
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text, session_id: sessionId })
       });
       const data = await res.json();
 
@@ -96,4 +98,5 @@
     });
   </script>
 </body>
+
 </html>

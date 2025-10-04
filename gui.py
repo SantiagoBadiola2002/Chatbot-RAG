@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 import uuid
-from app import hybrid_chatbot  # tu función
+from services.chatbot import hybrid_chatbot
+
 
 app = Flask(__name__)
 
